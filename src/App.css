@@ -292,6 +292,84 @@ button:hover {
   opacity: 0.7;
 }
 
+.reservation-list {
+  display: grid;
+  gap: 14px;
+}
+
+.reservation-item {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--soft);
+}
+
+.reservation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.reservation-header h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.reservation-meta,
+.reservation-total {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.reservation-total {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.reservation-actions {
+  display: grid;
+  grid-template-columns: auto 72px;
+  gap: 8px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.reservation-actions input {
+  min-height: 38px;
+  padding: 0 8px;
+  text-align: center;
+}
+
+.remove-button {
+  min-height: 32px;
+  padding: 0 10px;
+  border-color: #fecaca;
+  background: #fff1f2;
+  color: #b42318;
+  font-size: 0.8rem;
+}
+
+.remove-button:hover {
+  background: #ffe4e6;
+}
+
+.validation-error {
+  grid-column: 1 / -1;
+  color: #b42318;
+  font-size: 0.75rem;
+}
+
+.error-state p {
+  margin-bottom: 16px;
+  color: #b42318;
+}
+
 .summary {
   margin-top: 24px;
   padding-top: 20px;

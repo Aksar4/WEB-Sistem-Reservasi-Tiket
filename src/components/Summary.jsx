@@ -1,18 +1,10 @@
-const ADMINISTRATION_FEE = 5000
-
-function Summary({ reservations = [] }) {
-  const totalTickets = reservations.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  )
-
-  const subtotal = reservations.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  )
-  const isEmpty = reservations.length === 0
-  const administrationFee = isEmpty ? 0 : ADMINISTRATION_FEE
-  const totalPayment = subtotal + administrationFee
+function Summary({
+  totalTickets = 0,
+  subtotal = 0,
+  administrationFee = 0,
+  totalPayment = 0,
+}) {
+  const formatCurrency = (value) => `Rp${Number(value).toLocaleString('id-ID')}`
 
   return (
     <div className="summary" aria-label="Ringkasan pembayaran">
@@ -22,15 +14,15 @@ function Summary({ reservations = [] }) {
       </div>
       <div className="summary-row">
         <span>Subtotal</span>
-        <strong>Rp{subtotal.toLocaleString('id-ID')}</strong>
+        <strong>{formatCurrency(subtotal)}</strong>
       </div>
       <div className="summary-row">
         <span>Biaya administrasi</span>
-        <strong>Rp{administrationFee.toLocaleString('id-ID')}</strong>
+        <strong>{formatCurrency(administrationFee)}</strong>
       </div>
       <div className="summary-total">
         <span>Total pembayaran</span>
-        <strong>Rp{totalPayment.toLocaleString('id-ID')}</strong>
+        <strong>{formatCurrency(totalPayment)}</strong>
       </div>
     </div>
   )

@@ -1,38 +1,26 @@
-
-function SearchFilter(props) {
-  const {
-    search,
-    onSearch,
-    selected,
-    filter,
-    totalResult,
-  } = props;
-
-  const handleSearchChange = (event) => {
-    onSearch(event.target.value);
-  };
-
-  const handleFilterChange = (event) => {
-    filter(event.target.value);
-  };
-
+function SearchFilter({
+  searchQuery,
+  onSearch,
+  selectedCategory,
+  onFilter,
+  resultCount,
+}) {
   return (
     <div className="search-filter">
       <label className="field">
         <span>Cari nama shuttle</span>
         <input
           type="search"
-          placeholder="Contoh: Shuttle Utara"
-          value={search}
-          onChange={handleSearchChange}
+          value={searchQuery}
+          onChange={(event) => onSearch(event.target.value)}
+          placeholder="Contoh: Kampus ke Stasiun"
         />
       </label>
-
       <label className="field">
         <span>Sesi perjalanan</span>
         <select
-          value={selected}
-          onChange={handleFilterChange}
+          value={selectedCategory}
+          onChange={(event) => onFilter(event.target.value)}
         >
           <option value="Semua">Semua</option>
           <option value="Pagi">Pagi</option>
@@ -40,12 +28,9 @@ function SearchFilter(props) {
           <option value="Sore">Sore</option>
         </select>
       </label>
-
-      <p className="result-count">
-        {totalResult} hasil
-      </p>
+      <p className="result-count" aria-live="polite">{resultCount} hasil</p>
     </div>
-  );
+  )
 }
 
-export default SearchFilter;
+export default SearchFilter

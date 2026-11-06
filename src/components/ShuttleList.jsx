@@ -2,8 +2,8 @@ function ShuttleList({ shuttles = [], onAdd }) {
   if (!shuttles || shuttles.length === 0) {
     return (
       <div className="empty-state">
-        <p>Data shuttle belum tersedia.</p>
-        <small>Silakan periksa kembali jadwal atau ubah kriteria pencarian Anda.</small>
+        <p>Tidak ada shuttle sesuai pencarian.</p>
+        <small>Coba ubah kata kunci atau sesi perjalanan.</small>
       </div>
     )
   }
