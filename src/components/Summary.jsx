@@ -10,7 +10,7 @@ function Summary({ reservations = [] }) {
     (sum, item) => sum + item.price * item.quantity,
     0
   )
-
+  const isEmpty = reservations.length === 0
   const administrationFee = isEmpty ? 0 : ADMINISTRATION_FEE
   const totalPayment = subtotal + administrationFee
 
