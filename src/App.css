@@ -1,85 +1,246 @@
-:root {
-  --ink: #14213d;
-  --muted: #667085;
-  --line: #e4e7ec;
-  --surface: #ffffff;
-  --soft: #f4f7fb;
-  --brand: #1769aa;
-  --brand-dark: #0f4c81;
+/* Design system adapted from AntiSlopUI (MIT) — brian (Ade Febrian) — https://github.com/Adefebrian/AntislopUI */
+/* Transit / Terminal layer: square corners, one signal color, rules carry the structure. */
+
+/* ==========================================================================
+   1. Buttons — fill-from-bottom via a solid background-image (no pseudo layer)
+   ========================================================================== */
+
+button,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  margin: 0;
+  padding: 0 1.25rem;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background-color: transparent;
+  background-image: linear-gradient(var(--ink), var(--ink));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 0%;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-snap),
+    background-size var(--dur-fast) var(--ease-snap);
 }
 
-* {
-  box-sizing: border-box;
+button:not(:disabled):hover,
+button:not(:disabled):focus-visible,
+.btn:not(:disabled):not([aria-disabled='true']):hover,
+.btn:not(:disabled):not([aria-disabled='true']):focus-visible {
+  background-size: 100% 100%;
+  color: var(--paper);
 }
 
-body {
-  background: #f6f8fb;
+.btn--accent {
+  background-color: var(--accent);
+  background-image: linear-gradient(var(--ink), var(--ink));
+  color: var(--on-accent);
+}
+
+.btn--accent:not(:disabled):not([aria-disabled='true']):hover,
+.btn--accent:not(:disabled):not([aria-disabled='true']):focus-visible {
+  color: var(--paper);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  background-image: linear-gradient(var(--ink), var(--ink));
+  border-color: var(--ink);
   color: var(--ink);
 }
 
-#root {
-  width: 100%;
-  max-width: none;
-  border: 0;
-  text-align: left;
+button:disabled,
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  background-color: var(--paper-2);
+  background-image: none;
+  border-color: var(--ink-soft);
+  border-style: dashed;
+  color: var(--ink-soft);
+  cursor: not-allowed;
 }
 
+/* ==========================================================================
+   2. Shell + departure-board header
+   ========================================================================== */
+
 .app-shell {
+  display: flex;
+  flex-direction: column;
   min-height: 100svh;
+  background: var(--paper);
 }
 
 .app-header {
-  padding: 64px max(24px, calc((100% - 1120px) / 2));
-  background: linear-gradient(120deg, #0f4c81, #1769aa);
-  color: white;
+  padding-block: clamp(44px, 8vw, 88px) clamp(32px, 5vw, 56px);
+  padding-inline: max(24px, calc((100% - 1120px) / 2));
+  background: var(--night);
+  color: var(--chalk);
+  border-bottom: 2px solid var(--accent);
 }
 
-.app-header h1 {
-  max-width: 720px;
-  margin: 8px 0 16px;
-  color: inherit;
-  font-size: clamp(2rem, 5vw, 3.75rem);
-  line-height: 1.05;
-}
-
-.app-description {
-  max-width: 560px;
-  color: #dbeafe;
-}
-
-.app-content {
-  width: min(1120px, calc(100% - 48px));
-  margin: 0 auto;
-  padding: 40px 0 64px;
+/* Route motif: pure-CSS dashed transit line (decorative, no copy). */
+.app-header::after {
+  content: '';
+  display: block;
+  height: 2px;
+  margin-top: clamp(28px, 5vw, 48px);
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--chalk-soft) 0 14px,
+    transparent 14px 24px
+  );
 }
 
 .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.65em;
   margin: 0;
-  color: #77b5e8;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
   font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
+.eyebrow::before {
+  content: '';
+  flex: none;
+  width: 0.5em;
+  height: 0.5em;
+  background: var(--accent);
+}
+
+.app-header .eyebrow {
+  color: var(--chalk-soft);
+}
+
+.hero-title {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.22em;
+  margin: clamp(14px, 2.2vw, 22px) 0 0;
+  color: inherit;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 7.5vw, 5.25rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+
+/* Mask-line reveal: outer clips, inner slides up. */
+.hero-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.hero-word__inner {
+  display: inline-block;
+}
+
+.js .hero-word__inner {
+  transform: translateY(110%);
+  animation: hero-rise var(--dur-slow) var(--ease-out-expo) both;
+  animation-delay: calc(120ms + var(--i, 0) * 90ms);
+}
+
+@keyframes hero-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.app-description {
+  max-width: 52ch;
+  margin: clamp(14px, 2vw, 20px) 0 0;
+  color: var(--chalk-soft);
+  font-size: clamp(1rem, 1.4vw, 1.0625rem);
+  line-height: 1.65;
+}
+
+/* ==========================================================================
+   3. Content column + sections + panels
+   ========================================================================== */
+
+.app-content {
+  flex: 1 0 auto;
+  width: min(1120px, 100% - 48px);
+  margin: 0 auto;
+  padding: 40px 0 72px;
+}
+
+.section-heading {
+  display: grid;
+  gap: 6px;
+}
+
 .section-heading h2 {
-  margin: 6px 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
   color: var(--ink);
-  font-size: 1.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.section-heading h2::before {
+  content: '';
+  flex: none;
+  width: 0.42em;
+  height: 0.42em;
+  background: var(--accent);
 }
 
 .search-section,
 .panel {
-  padding: 28px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: var(--surface);
-  box-shadow: 0 8px 28px rgba(20, 33, 61, 0.06);
+  --pad: 24px;
+  padding: var(--pad);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper);
+  box-shadow: none;
 }
+
+.panel {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   4. Search filter
+   ========================================================================== */
 
 .search-filter {
   display: grid;
-  grid-template-columns: 1fr 220px auto;
+  grid-template-columns: minmax(0, 1fr) 220px auto;
   gap: 16px;
   align-items: end;
 }
@@ -87,72 +248,88 @@ body {
 .field {
   display: grid;
   gap: 8px;
-  color: var(--muted);
-  font-size: 0.875rem;
-  font-weight: 600;
+  min-width: 0;
 }
 
-input,
-select,
-button {
-  min-height: 44px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  font: inherit;
+.field > span {
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 input,
 select {
   width: 100%;
-  padding: 0 12px;
-  background: var(--surface);
+  min-width: 0;
+  min-height: 48px;
+  margin: 0;
+  padding: 0 14px;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper-2);
   color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.2;
 }
 
-button {
-  padding: 0 16px;
-  border-color: var(--brand);
-  background: var(--brand);
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background: var(--brand-dark);
+input::placeholder {
+  color: var(--ink-soft);
+  opacity: 1;
 }
 
 .result-count {
-  margin: 0 0 12px;
-  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: start;
+  min-height: 48px;
+  margin: 0;
+  padding: 0 16px;
+  border-left: 4px solid var(--accent);
+  background: var(--night);
+  color: var(--chalk);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
+
+/* ==========================================================================
+   5. Workspace grid + catalog panel
+   ========================================================================== */
 
 .workspace-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.7fr);
   gap: 24px;
   margin-top: 24px;
+  align-items: start;
 }
 
-.empty-state,
-.component-placeholder {
-  padding: 32px 20px;
-  border: 1px dashed #c8d3e1;
-  border-radius: 12px;
-  background: var(--soft);
-  color: var(--muted);
-  text-align: center;
+.catalog-panel .empty-state,
+.catalog-panel .component-placeholder {
+  flex: 1 1 auto;
 }
 
-.empty-state p,
-.component-placeholder p {
-  margin: 0 0 8px;
-  color: var(--ink);
-  font-weight: 600;
-}
+/* ==========================================================================
+   6. Reservation panel — ticket treatment
+   ========================================================================== */
 
-.empty-state small {
-  display: block;
+.reservation-panel {
+  background-color: var(--paper-2);
+  /* Punch-hole perforation down the left edge (radial-gradient dots). */
+  background-image: radial-gradient(circle, var(--ink-soft) 1.5px, transparent 1.6px);
+  background-size: 12px 12px;
+  background-repeat: repeat-y;
+  background-position: left 9px top 9px;
+  padding-left: calc(var(--pad, 24px) + 6px);
 }
 
 /* Shuttle List & Card Styles (Anggota 2) */
@@ -371,50 +548,137 @@ button:hover {
 }
 
 .summary {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
+  margin: 28px calc(-1 * var(--pad, 24px)) calc(-1 * var(--pad, 24px));
+  padding: 20px var(--pad, 24px) 0;
+  border-top: 2px dashed var(--ink-soft);
 }
 
 .summary-row,
 .summary-total {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  padding: 8px 0;
-  color: var(--muted);
+}
+
+.summary-row {
+  padding: 10px 0;
+}
+
+.summary-row + .summary-row {
+  border-top: 1px dashed var(--ink-soft);
+}
+
+.summary-row span,
+.summary-total span {
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.summary-row strong,
+.summary-total strong {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-row strong {
+  font-size: 0.9375rem;
 }
 
 .summary-total {
-  margin-top: 8px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
+  margin: 18px calc(-1 * var(--pad, 24px)) 0;
+  padding: 14px var(--pad, 24px);
+  border-left: 4px solid var(--accent);
+  background: var(--night);
+  color: var(--chalk);
+}
+
+.summary-total span {
+  color: var(--chalk-soft);
+}
+
+.summary-total strong {
+  color: var(--chalk);
+  font-size: 1.5rem;
+}
+
+/* ==========================================================================
+   7. Empty states / component placeholders
+   ========================================================================== */
+
+.empty-state,
+.component-placeholder {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 40px 24px;
+  border: 2px dashed var(--ink-soft);
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
+}
+
+.empty-state > p,
+.component-placeholder > p,
+.empty-state__title {
+  margin: 0;
   color: var(--ink);
-  font-size: 1.05rem;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.empty-state > small,
+.component-placeholder > small,
+.empty-state__note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   8. Responsive
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .workspace-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
   .app-header {
-    padding: 44px 24px;
+    padding-inline: 16px;
   }
 
   .app-content {
-    width: min(100% - 32px, 640px);
-    padding-top: 24px;
+    width: min(1120px, 100% - 32px);
+    padding: 28px 0 56px;
   }
 
-  .search-filter,
-  .workspace-grid {
-    grid-template-columns: 1fr;
+  .search-filter {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .search-section,
   .panel {
-    padding: 20px;
+    --pad: 20px;
   }
 
   .result-count {
-    margin: 0;
+    margin-top: 4px;
   }
 
   .shuttle-card-body {
@@ -430,12 +694,39 @@ button:hover {
   }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 420px) {
   .app-header {
-    padding: 36px 16px;
+    padding-inline: 12px;
   }
 
   .app-content {
     width: calc(100% - 24px);
+    padding: 24px 0 48px;
+  }
+
+  .search-section,
+  .panel {
+    --pad: 16px;
+  }
+
+  .empty-state,
+  .component-placeholder {
+    padding: 28px 16px;
+  }
+}
+
+/* ==========================================================================
+   9. Reduced motion gates
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  button,
+  .btn {
+    transition: none;
+  }
+
+  .js .hero-word__inner {
+    transform: none;
+    animation: none;
   }
 }

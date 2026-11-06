@@ -2,8 +2,8 @@ function ShuttleList({ shuttles = [], onAdd }) {
   if (!shuttles || shuttles.length === 0) {
     return (
       <div className="empty-state">
-        <p>Tidak ada shuttle sesuai pencarian.</p>
-        <small>Coba ubah kata kunci atau sesi perjalanan.</small>
+        <p className="empty-state__title">Tidak ada shuttle sesuai pencarian.</p>
+        <small className="empty-state__note">Coba ubah kata kunci atau sesi perjalanan.</small>
       </div>
     )
   }
@@ -67,7 +67,7 @@ function ShuttleList({ shuttles = [], onAdd }) {
             <div className="shuttle-card-footer">
               <button
                 type="button"
-                className="btn-tambah"
+                className="btn btn--accent"
                 onClick={() => onAdd && onAdd(shuttle)}
                 disabled={isSoldOut}
                 aria-label={`Tambah tiket ${name}`}

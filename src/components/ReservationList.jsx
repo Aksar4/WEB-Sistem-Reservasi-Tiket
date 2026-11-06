@@ -7,8 +7,8 @@ function ReservationList({
   if (reservations.length === 0) {
     return (
       <div className="empty-state">
-        <p>Belum ada reservasi.</p>
-        <small>Shuttle yang dipilih akan muncul di sini.</small>
+        <p className="empty-state__title">Belum ada reservasi.</p>
+        <small className="empty-state__note">Shuttle yang dipilih akan muncul di sini.</small>
       </div>
     )
   }
@@ -31,7 +31,7 @@ function ReservationList({
                 <h3>{name}</h3>
                 <button
                   type="button"
-                  className="remove-button"
+                  className="btn btn--ghost"
                   onClick={() => onRemove(id)}
                 >
                   Hapus
