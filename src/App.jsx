@@ -3,6 +3,7 @@ import ShuttleList from './components/ShuttleList'
 import SearchFilter from './components/SearchFilter'
 import ReservationList from './components/ReservationList'
 import Summary from './components/Summary'
+import { useReveal } from './hooks/useReveal'
 import './App.css'
 
 function App() {
@@ -10,6 +11,8 @@ function App() {
   const [reservations] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Semua')
+
+  useReveal()
 
   const handleAdd = () => undefined
   const handleUpdateQuantity = () => undefined
@@ -20,7 +23,11 @@ function App() {
       <header className="app-header">
         <div>
           <p className="eyebrow">Sistem Transportasi Kampus</p>
-          <h1>Reservasi Tiket Shuttle</h1>
+          <h1 className="hero-title">
+            <span className="hero-word"><span className="hero-word__inner" style={{ '--i': 0 }}>Reservasi</span></span>{' '}
+            <span className="hero-word"><span className="hero-word__inner" style={{ '--i': 1 }}>Tiket</span></span>{' '}
+            <span className="hero-word"><span className="hero-word__inner" style={{ '--i': 2 }}>Shuttle</span></span>
+          </h1>
           <p className="app-description">
             Pilih jadwal shuttle kampus dan siapkan reservasi perjalananmu.
           </p>
@@ -28,7 +35,7 @@ function App() {
       </header>
 
       <main className="app-content">
-        <section className="search-section" aria-labelledby="search-title">
+        <section className="search-section" data-reveal style={{ '--i': 0 }} aria-labelledby="search-title">
           <div className="section-heading">
             <p className="eyebrow">Katalog perjalanan</p>
             <h2 id="search-title">Cari shuttle</h2>
@@ -43,7 +50,7 @@ function App() {
         </section>
 
         <div className="workspace-grid">
-          <section className="panel catalog-panel" aria-labelledby="catalog-title">
+          <section className="panel catalog-panel" data-reveal style={{ '--i': 1 }} aria-labelledby="catalog-title">
             <div className="section-heading">
               <p className="eyebrow">Jadwal tersedia</p>
               <h2 id="catalog-title">Daftar shuttle</h2>
@@ -51,7 +58,7 @@ function App() {
             <ShuttleList shuttles={shuttles} onAdd={handleAdd} />
           </section>
 
-          <aside className="panel reservation-panel" aria-labelledby="reservation-title">
+          <aside className="panel reservation-panel" data-reveal style={{ '--i': 2 }} aria-labelledby="reservation-title">
             <div className="section-heading">
               <p className="eyebrow">Tiket pilihanmu</p>
               <h2 id="reservation-title">Daftar reservasi</h2>
