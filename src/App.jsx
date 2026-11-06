@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import ShuttleList from './components/ShuttleList'
 import SearchFilter from './components/SearchFilter'
 import ReservationList from './components/ReservationList'
@@ -6,17 +6,142 @@ import Summary from './components/Summary'
 import { useReveal } from './hooks/useReveal'
 import './App.css'
 
+const ADMINISTRATION_FEE = 5000
+
 function App() {
-  const [shuttles] = useState([])
-  const [reservations] = useState([])
+  const [shuttles, setShuttles] = useState([])
+  const [reservations, setReservations] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Semua')
+  const [loading, setLoading] = useState(true)
+  const [requestError, setRequestError] = useState('')
+  const [quantityErrors, setQuantityErrors] = useState({})
 
   useReveal()
 
-  const handleAdd = () => undefined
-  const handleUpdateQuantity = () => undefined
-  const handleRemove = () => undefined
+  const loadShuttles = useCallback(async () => {
+    setLoading(true)
+    setRequestError('')
+
+    try {
+      const response = await fetch('/data/shuttle.json')
+      if (!response.ok) {
+        throw new Error(`Request gagal (${response.status})`)
+      }
+
+      const data = await response.json()
+      if (!Array.isArray(data)) {
+        throw new Error('Format data shuttle tidak valid')
+      }
+      setShuttles(data)
+    } catch (error) {
+      setRequestError(error.message || 'Data shuttle gagal dimuat.')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Loading state starts true; fetch completion updates it asynchronously.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadShuttles()
+  }, [loadShuttles])
+
+  const filteredShuttles = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase()
+
+    return shuttles.filter((shuttle) => {
+      const name = String(shuttle.nama ?? '').toLowerCase()
+      const matchesName = name.includes(query)
+      const matchesCategory =
+        selectedCategory === 'Semua' || shuttle.kategori === selectedCategory
+      return matchesName && matchesCategory
+    })
+  }, [searchQuery, selectedCategory, shuttles])
+
+  const handleAdd = (shuttle) => {
+    const maxQuantity = Math.min(4, Number(shuttle.stok) || 0)
+    const existing = reservations.find((item) => item.id === shuttle.id)
+
+    if (maxQuantity < 1) return
+    if (existing?.quantity >= maxQuantity) {
+      setQuantityErrors((currentErrors) => ({
+        ...currentErrors,
+        [shuttle.id]: `Maksimal ${maxQuantity} tiket untuk shuttle ini.`,
+      }))
+      return
+    }
+
+    setReservations((currentReservations) => {
+      const currentItem = currentReservations.find((item) => item.id === shuttle.id)
+
+      if (currentItem) {
+        return currentReservations.map((item) =>
+          item.id === shuttle.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
+        )
+      }
+
+      return [...currentReservations, { ...shuttle, quantity: 1 }]
+    })
+    setQuantityErrors((currentErrors) => ({
+      ...currentErrors,
+      [shuttle.id]: '',
+    }))
+  }
+
+  const handleUpdateQuantity = (id, rawQuantity) => {
+    const shuttle = shuttles.find((item) => item.id === id)
+    const quantity = Number(rawQuantity)
+    const maxQuantity = Math.min(4, Number(shuttle?.stok) || 0)
+    let message = ''
+
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      message = 'Jumlah tiket harus bilangan bulat positif.'
+    } else if (quantity > 4) {
+      message = 'Maksimal 4 tiket untuk satu shuttle.'
+    } else if (quantity > maxQuantity) {
+      message = `Jumlah tiket melebihi stok. Maksimal ${maxQuantity} tiket.`
+    }
+
+    if (message) {
+      setQuantityErrors((currentErrors) => ({
+        ...currentErrors,
+        [id]: message,
+      }))
+      return
+    }
+
+    setReservations((currentReservations) =>
+      currentReservations.map((item) =>
+        item.id === id ? { ...item, quantity } : item,
+      ),
+    )
+    setQuantityErrors((currentErrors) => ({ ...currentErrors, [id]: '' }))
+  }
+
+  const handleRemove = (id) => {
+    setReservations((currentReservations) =>
+      currentReservations.filter((item) => item.id !== id),
+    )
+    setQuantityErrors((currentErrors) => {
+      const nextErrors = { ...currentErrors }
+      delete nextErrors[id]
+      return nextErrors
+    })
+  }
+
+  const totalTickets = reservations.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  )
+  const subtotal = reservations.reduce(
+    (total, item) => total + Number(item.harga) * item.quantity,
+    0,
+  )
+  const administrationFee = reservations.length > 0 ? ADMINISTRATION_FEE : 0
+  const totalPayment = subtotal + administrationFee
 
   return (
     <div className="app-shell">
@@ -45,7 +170,7 @@ function App() {
             onSearch={setSearchQuery}
             selectedCategory={selectedCategory}
             onFilter={setSelectedCategory}
-            resultCount={shuttles.length}
+            resultCount={filteredShuttles.length}
           />
         </section>
 
@@ -55,7 +180,16 @@ function App() {
               <p className="eyebrow">Jadwal tersedia</p>
               <h2 id="catalog-title">Daftar shuttle</h2>
             </div>
-            <ShuttleList shuttles={shuttles} onAdd={handleAdd} />
+            {loading ? (
+              <div className="empty-state"><p>Memuat data shuttle...</p></div>
+            ) : requestError ? (
+              <div className="empty-state error-state">
+                <p>{requestError}</p>
+                <button type="button" onClick={loadShuttles}>Coba Lagi</button>
+              </div>
+            ) : (
+              <ShuttleList shuttles={filteredShuttles} onAdd={handleAdd} />
+            )}
           </section>
 
           <aside className="panel reservation-panel" data-reveal style={{ '--i': 2 }} aria-labelledby="reservation-title">
@@ -65,14 +199,15 @@ function App() {
             </div>
             <ReservationList
               reservations={reservations}
+              quantityErrors={quantityErrors}
               onUpdateQuantity={handleUpdateQuantity}
               onRemove={handleRemove}
             />
             <Summary
-              totalTickets={0}
-              subtotal={0}
-              administrationFee={0}
-              totalPayment={0}
+              totalTickets={totalTickets}
+              subtotal={subtotal}
+              administrationFee={administrationFee}
+              totalPayment={totalPayment}
             />
           </aside>
         </div>

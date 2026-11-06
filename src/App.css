@@ -332,6 +332,221 @@ input::placeholder {
   padding-left: calc(var(--pad, 24px) + 6px);
 }
 
+/* Shuttle List & Card Styles (Anggota 2) */
+.shuttle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.shuttle-card {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.shuttle-card:hover {
+  border-color: #b9d5f3;
+  box-shadow: 0 6px 18px rgba(20, 33, 61, 0.06);
+}
+
+.shuttle-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.shuttle-name {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.shuttle-session-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--soft);
+  color: var(--brand);
+}
+
+.shuttle-session-badge.session-pagi {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.shuttle-session-badge.session-siang {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.shuttle-session-badge.session-sore {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.shuttle-card-body {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid var(--soft);
+  border-bottom: 1px solid var(--soft);
+}
+
+.shuttle-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shuttle-info-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.shuttle-info-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.shuttle-info-value.seats-available {
+  color: #059669;
+}
+
+.shuttle-info-value.seats-empty {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.shuttle-price-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+}
+
+.shuttle-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.btn-tambah {
+  min-height: 40px;
+  padding: 0 20px;
+  border: 1px solid var(--brand);
+  border-radius: 10px;
+  background: var(--brand);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-tambah:hover:not(:disabled) {
+  background: var(--brand-dark);
+}
+
+.btn-tambah:disabled {
+  background: #94a3b8;
+  border-color: #94a3b8;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.reservation-list {
+  display: grid;
+  gap: 14px;
+}
+
+.reservation-item {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--soft);
+}
+
+.reservation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.reservation-header h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.reservation-meta,
+.reservation-total {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.reservation-total {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.reservation-actions {
+  display: grid;
+  grid-template-columns: auto 72px;
+  gap: 8px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.reservation-actions input {
+  min-height: 38px;
+  padding: 0 8px;
+  text-align: center;
+}
+
+.remove-button {
+  min-height: 32px;
+  padding: 0 10px;
+  border-color: #fecaca;
+  background: #fff1f2;
+  color: #b42318;
+  font-size: 0.8rem;
+}
+
+.remove-button:hover {
+  background: #ffe4e6;
+}
+
+.validation-error {
+  grid-column: 1 / -1;
+  color: #b42318;
+  font-size: 0.75rem;
+}
+
+.error-state p {
+  margin-bottom: 16px;
+  color: #b42318;
+}
+
 .summary {
   margin: 28px calc(-1 * var(--pad, 24px)) calc(-1 * var(--pad, 24px));
   padding: 20px var(--pad, 24px) 0;
@@ -464,6 +679,18 @@ input::placeholder {
 
   .result-count {
     margin-top: 4px;
+  }
+
+  .shuttle-card-body {
+    grid-template-columns: 1fr;
+  }
+
+  .shuttle-card-footer {
+    justify-content: stretch;
+  }
+
+  .btn-tambah {
+    width: 100%;
   }
 }
 

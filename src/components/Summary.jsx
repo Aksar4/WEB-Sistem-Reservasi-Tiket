@@ -1,9 +1,11 @@
 function Summary({
-  totalTickets,
-  subtotal,
-  administrationFee,
-  totalPayment,
+  totalTickets = 0,
+  subtotal = 0,
+  administrationFee = 0,
+  totalPayment = 0,
 }) {
+  const formatCurrency = (value) => `Rp${Number(value).toLocaleString('id-ID')}`
+
   return (
     <div className="summary" aria-label="Ringkasan pembayaran">
       <div className="summary-row">
@@ -12,15 +14,15 @@ function Summary({
       </div>
       <div className="summary-row">
         <span>Subtotal</span>
-        <strong>Rp{subtotal.toLocaleString('id-ID')}</strong>
+        <strong>{formatCurrency(subtotal)}</strong>
       </div>
       <div className="summary-row">
         <span>Biaya administrasi</span>
-        <strong>Rp{administrationFee.toLocaleString('id-ID')}</strong>
+        <strong>{formatCurrency(administrationFee)}</strong>
       </div>
       <div className="summary-total">
         <span>Total pembayaran</span>
-        <strong>Rp{totalPayment.toLocaleString('id-ID')}</strong>
+        <strong>{formatCurrency(totalPayment)}</strong>
       </div>
     </div>
   )

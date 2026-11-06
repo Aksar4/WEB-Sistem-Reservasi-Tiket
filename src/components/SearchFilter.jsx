@@ -13,7 +13,7 @@ function SearchFilter({
           type="search"
           value={searchQuery}
           onChange={(event) => onSearch(event.target.value)}
-          placeholder="Contoh: Shuttle Utara"
+          placeholder="Contoh: Kampus ke Stasiun"
         />
       </label>
       <label className="field">
@@ -28,7 +28,7 @@ function SearchFilter({
           <option value="Sore">Sore</option>
         </select>
       </label>
-      <p className="result-count">{resultCount} hasil</p>
+      <p className="result-count" aria-live="polite">{resultCount} hasil</p>
     </div>
   )
 }
