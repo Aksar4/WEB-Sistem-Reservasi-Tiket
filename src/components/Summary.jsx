@@ -1,9 +1,19 @@
-function Summary({
-  totalTickets,
-  subtotal,
-  administrationFee,
-  totalPayment,
-}) {
+const ADMINISTRATION_FEE = 5000
+
+function Summary({ reservations = [] }) {
+  const totalTickets = reservations.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  )
+
+  const subtotal = reservations.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  )
+
+  const administrationFee = isEmpty ? 0 : ADMINISTRATION_FEE
+  const totalPayment = subtotal + administrationFee
+
   return (
     <div className="summary" aria-label="Ringkasan pembayaran">
       <div className="summary-row">
