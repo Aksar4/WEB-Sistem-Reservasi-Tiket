@@ -34,11 +34,11 @@ function App() {
             <h2 id="search-title">Cari shuttle</h2>
           </div>
           <SearchFilter
-            searchQuery={searchQuery}
+            search={searchQuery}
             onSearch={setSearchQuery}
-            selectedCategory={selectedCategory}
-            onFilter={setSelectedCategory}
-            resultCount={shuttles.length}
+            selected={selectedCategory}
+            filter={setSelectedCategory}
+            totalResult={shuttles.length}
           />
         </section>
 
