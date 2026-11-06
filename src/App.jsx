@@ -5,13 +5,60 @@ import ReservationList from './components/ReservationList'
 import Summary from './components/Summary'
 import './App.css'
 
+const INITIAL_SHUTTLES = [
+  {
+    id: 'S01',
+    nama: 'Kampus ke Stasiun',
+    kategori: 'Pagi',
+    harga: 12000,
+    stok: 6,
+  },
+  {
+    id: 'S02',
+    nama: 'Kampus ke Terminal',
+    kategori: 'Pagi',
+    harga: 15000,
+    stok: 3,
+  },
+  {
+    id: 'S03',
+    nama: 'Kampus ke Pusat Kota',
+    kategori: 'Siang',
+    harga: 18000,
+    stok: 5,
+  },
+  {
+    id: 'S04',
+    nama: 'Kampus ke Asrama',
+    kategori: 'Siang',
+    harga: 8000,
+    stok: 0,
+  },
+  {
+    id: 'S05',
+    nama: 'Kampus ke Bandara',
+    kategori: 'Sore',
+    harga: 35000,
+    stok: 2,
+  },
+  {
+    id: 'S06',
+    nama: 'Kampus ke Stasiun',
+    kategori: 'Sore',
+    harga: 12000,
+    stok: 8,
+  },
+]
+
 function App() {
-  const [shuttles] = useState([])
+  const [shuttles] = useState(INITIAL_SHUTTLES)
   const [reservations] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Semua')
 
-  const handleAdd = () => undefined
+  const handleAdd = (shuttle) => {
+    console.log('Shuttle ditambahkan:', shuttle)
+  }
   const handleUpdateQuantity = () => undefined
   const handleRemove = () => undefined
 
